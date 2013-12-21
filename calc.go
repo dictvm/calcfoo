@@ -9,29 +9,52 @@ func main() {
 // also based on: http://piratepad.net/XJnL7LdAUx
 
     var inputNum int
-    var guesses []int
-    var guessTries int
+    var guessedNum int
+    var tries int = 0
 
-    fmt.Println("Enter the number your opponent shall guess.")
-    fmt.Scanln(&inputNum)
+    fmt.Println("Enter a number between 1 and 10 that your opponent shall guess.")
+    inputNum = getInput()
 
-    for guessTries < 2 {
-        guessTries++
-        fmt.Println("Guess the number your opponent entered.")
-        fmt.Scanln(&guesses)
-            if guessCorrect(inputNum, guesses) == true {
-                fmt.Println("You guessed correctly, good job.")
-            } else {
-                fmt.Println("Try again.")
-            }
-    }
-}
+    fmt.Println("Now try to guess your opponents' input.")
 
-func guessCorrect (inputNum int, guesses []int) bool {
-    for guessContainsInput, inputNum := range guesses {
-        if guessContainsInput == inputNum {
-            return true
+    for tries < 3  {
+        fmt.Println("Enter a number between 1 and 10.")
+        guessedNum = getInput()
+        guessEqualsInput(inputNum, guessedNum)
+        tries++
+
+        if guessEqualsInput(inputNum, guessedNum) == true {
+            fmt.Println("Good job, your guess was correct.")
+            break // exits the current for-loop
         }
     }
+
+    if guessEqualsInput(inputNum, guessedNum) != true {
+        fmt.Println("You lost the game. Your opponent entered ", inputNum, ".")
+    }
+
+
+}
+
+func getInput() int {
+    var inputNum int
+    var isInputCorrect bool = false
+
+    for isInputCorrect == false {
+        fmt.Scanln(&inputNum)
+        if inputNum <= 10 && inputNum >= 1 {
+            isInputCorrect = true
+        } else {
+            fmt.Println("Nope. Way out of scope. Stay between 1 and 10.")
+        }
+    }
+    return inputNum
+}
+
+func guessEqualsInput(inputNum int, guessedNum int) bool {
+    if guessedNum == inputNum {
+        return true
+    } else {
     return false
+    }
 }
