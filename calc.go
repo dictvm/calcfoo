@@ -20,19 +20,24 @@ func main() {
     for tries < 3  {
         fmt.Println("Enter a number between 1 and 10.")
         guessedNum = getInput()
-        guessEqualsInput(inputNum, guessedNum)
         tries++
 
         if guessEqualsInput(inputNum, guessedNum) == true {
             fmt.Println("Good job, your guess was correct.")
             break // exits the current for-loop
         }
+
+        if guessedNum > inputNum {
+            fmt.Println("Your number was bigger than the input of your opponent.")
+        } else {
+            fmt.Println("Your number was smaller than the input of your opponent.")
+        }
+
     }
 
     if guessEqualsInput(inputNum, guessedNum) != true {
         fmt.Println("You lost the game. Your opponent entered ", inputNum, ".")
     }
-
 
 }
 
