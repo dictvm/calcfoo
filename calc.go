@@ -32,7 +32,6 @@ func main() {
         } else {
             fmt.Println("Your number was smaller than the input of your opponent.")
         }
-
     }
 
     if guessEqualsInput(inputNum, guessedNum) != true {
