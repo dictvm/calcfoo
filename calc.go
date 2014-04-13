@@ -10,9 +10,12 @@ import (
     "encoding/csv"
 )
 
-// this is useful for debugging. comment out if not needed.
-// if debugging is need, use as function in various parts of
-// the code.
+/*
+ this is only useful for debugging. 
+ if debugging is needed, use as function in various parts of
+ the code.
+*/
+
 func dbg (err string) {
     fmt.Println("DEBUG:" +err)
     }
@@ -103,8 +106,10 @@ func getInput() int {
     return inputNum
 }
 
-// check if the guesses number is the same as the number that was entered
-//   by the AI or the human opponent
+/*
+ check if the guesses number is the same as the number that was entered
+ by the AI or the human opponent
+*/
 func guessEqualsInput(inputNum int, guessedNum int) bool {
     if guessedNum == inputNum {
         return true
@@ -135,8 +140,10 @@ func writeToFile(user string, score int) {
     f.Close()
 }
 
-// read entire csv highscore list into an array
-// simplifies working with each value
+/*
+ read entire csv highscore list into an array
+ simplifies working with each value
+*/
 func getUserScores(user string) {
     file, err := os.Open("/Users/dictvm/go/tmp/highscore")
     if err != nil {
