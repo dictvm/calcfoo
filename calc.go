@@ -8,7 +8,14 @@ import (
     "time"
     "strconv"
     "encoding/csv"
-    )
+)
+
+// this is useful for debugging. comment out if not needed.
+// if debugging is need, use as function in various parts of
+// the code.
+func dbg (err string) {
+    fmt.Println("DEBUG:" +err)
+    }
 
 func main() {
 
@@ -17,6 +24,9 @@ func main() {
     var inputNum, guessedNum, tries, opponentNum, score int
     var opponentSelected bool = false
     var userNameSet bool = false
+
+// display highscores before the game starts
+    getUserScores(user)
 
 // loop through username-input
     for userNameSet == false {
@@ -71,11 +81,13 @@ func main() {
     if guessEqualsInput(inputNum, guessedNum) != true {
         fmt.Println("You lost the game. Your opponent entered", inputNum, ".")
         fmt.Println("There will be no point for you. Good luck next time.")
+        fmt.Println("DEBUG: If highscore doesn't exist it won't be written at this time!")
     }
-//    printUserScores(getUserScores(user))
-      fmt.Println("Userscore should appear here.")
+    getUserScores(user)
+    fmt.Println("DEBUG: Userscore should appear here.")
 }
 
+// check entered numbers for validity
 func getInput() int {
     var inputNum int
     var isInputCorrect bool = false
@@ -91,13 +103,13 @@ func getInput() int {
     return inputNum
 }
 
-/* check if the guesses number is the same as the number that was entered
-   by the AI or the human opponent. */
+// check if the guesses number is the same as the number that was entered
+//   by the AI or the human opponent
 func guessEqualsInput(inputNum int, guessedNum int) bool {
     if guessedNum == inputNum {
         return true
     } else {
-    return false
+        return false
     }
 }
 
@@ -107,12 +119,12 @@ func random(min, max int) int {
     return rand.Intn(max - min) + min
 }
 
-// scoring should end up in user-specific files as csv
+// scoring should end up in a csv
 func writeToFile(user string, score int) {
-    fmt.Println("writing your score to file...")
-    f, err := os.OpenFile("/Users/dictvm/go/tmp/"+user, os.O_RDWR | os.O_APPEND | os.O_CREATE, 0666)
+    fmt.Println("Saving your score to local highscores...")
+    f, err := os.OpenFile("/Users/dictvm/go/tmp/highscore", os.O_RDWR | os.O_APPEND | os.O_CREATE, 0666)
     if err != nil {
-        fmt.Println("Error: something went wrong when writing your score.")
+        fmt.Println("Error: something went wrong while writing your score.")
         fmt.Println(err)
     }
     n, err := f.WriteString(user + "," + strconv.Itoa(score) + "\n")
@@ -123,46 +135,31 @@ func writeToFile(user string, score int) {
     f.Close()
 }
 
-/* let's grab the raw score data from the written files and analyse them for
-   highscore-handling
-func getUserScores(user string) []string {
-    reader := csv.NewReader("/Users/dictvm/go/tmp/"+user)
-    content, err := ioutil.ReadFile("/Users/dictvm/go/tmp/"+user)
-    if err != nil {
-        fmt.Println("Error: ")
-        fmt.Println(err)
-    }
-}
-*/
-
+// read entire csv highscore list into an array
+// simplifies working with each value
 func getUserScores(user string) {
-    file, err := os.Open("/Users/dictvm/go/tmp/"+user)
+    file, err := os.Open("/Users/dictvm/go/tmp/highscore")
     if err != nil {
         fmt.Println("Error:", err)
         return
     }
     defer file.Close()
     reader := csv.NewReader(file)
-    for true {
-        record, err := reader.Read()
+        records, err := reader.ReadAll()
+        fmt.Println("test",records)
         if err == io.EOF {
-            break
+            //break
         } else if err != nil {
             fmt.Println("Error:", err)
             return
         }
-        fmt.Println(record) // record has the type []string
+    for i := range records {
+        printUserScores(records[i])
     }
 }
 
-/* this should not longer be needed because we're using native encoding/csv
-    csvIndex := strings.Split(string(content), ",")
-    return csvIndex
-*/
-
+// prints highscores in case we need to diplay them ingame
 func printUserScores(highScore []string) {
-    fmt.Println("#####################")
     fmt.Println("Username: " +highScore[0])
     fmt.Println("Highscore: " +highScore[1])
-    fmt.Println("#####################")
 }
