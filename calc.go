@@ -15,7 +15,6 @@ import (
  if debugging is needed, use as function in various parts of
  the code.
 */
-
 func dbg(err string) {
 	fmt.Println("DEBUG:" + err)
 }
